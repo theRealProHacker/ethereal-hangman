@@ -27,6 +27,8 @@ def get_word(length: int, like: str, excludes: str) -> str|None:
 
 #========= This Part Handles the Game Logic and would be deployed on-chain =========
 
+MAX_WRONG_GUESSES = 6
+
 # First, the length of the word is determined
 l = randint(4, 10) # inclusive
 
@@ -66,6 +68,13 @@ while True:
         wrong_guesses += 1
         wrong_letters += letter
         print(f"Wrong! {word} ({l}) - Wrong guesses: {wrong_guesses} - Wrong letters: {wrong_letters}")
+    
+    if "_" not in word:
+        print(f"Congratulations! You guessed the word: {word}")
+        break
+    elif wrong_guesses >= MAX_WRONG_GUESSES:
+        print(f"Game over! The word was: {new_word}")
+        break
 
 
 
