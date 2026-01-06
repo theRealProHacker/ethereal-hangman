@@ -27,7 +27,77 @@ def get_word(length: int, like: str, excludes: str) -> str|None:
 
 #========= This Part Handles the Game Logic and would be deployed on-chain =========
 
-MAX_WRONG_GUESSES = 6
+HANGMAN_STAGES = [
+    """
+      ┌───┐
+      │   │
+          │
+          │
+          │
+          │
+    ══════╧══
+    """,
+    """
+      ┌───┐
+      │   │
+      O   │
+          │
+          │
+          │
+    ══════╧══
+    """,
+    """
+      ┌───┐
+      │   │
+      O   │
+      │   │
+          │
+          │
+    ══════╧══
+    """,
+    """
+      ┌───┐
+      │   │
+      O   │
+     /│   │
+          │
+          │
+    ══════╧══
+    """,
+    """
+      ┌───┐
+      │   │
+      O   │
+     /│\\  │
+          │
+          │
+    ══════╧══
+    """,
+    """
+      ┌───┐
+      │   │
+      O   │
+     /│\\  │
+     /    │
+          │
+    ══════╧══
+    """,
+    """
+      ┌───┐
+      │   │
+      O   │
+     /│\\  │
+     / \\  │
+          │
+    ══════╧══
+    """
+]
+
+MAX_WRONG_GUESSES = len(HANGMAN_STAGES) - 1  # 6 wrong guesses allowed
+
+def draw_hangman(wrong_guesses: int) -> None:
+    """Display the current hangman state."""
+    print(HANGMAN_STAGES[wrong_guesses])
 
 # First, the length of the word is determined
 l = randint(4, 10) # inclusive
@@ -62,11 +132,13 @@ while True:
             c if c == letter else word[i]
             for i, c in enumerate(new_word)
         )
+        draw_hangman(wrong_guesses)
         print(f"Correct! {word} ({l})")
     else:
         # wrong guess
         wrong_guesses += 1
         wrong_letters += letter
+        draw_hangman(wrong_guesses)
         print(f"Wrong! {word} ({l}) - Wrong guesses: {wrong_guesses} - Wrong letters: {wrong_letters}")
     
     if "_" not in word:
